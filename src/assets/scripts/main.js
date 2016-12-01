@@ -109,4 +109,6 @@
 
    window.scrollTo(0, 1);
 
-})(jQuery, ga);
+})(jQuery, window.ga || function () {
+  console.info('ga', arguments);
+});

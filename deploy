@@ -1,0 +1,84 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  echo -e "\e[1;40;92m"
+  echo -e "Informe a mensagem de commit..."
+  echo -e "\e[21;39;49m"
+  exit
+fi
+
+echo -e "\e[1;40;92m"
+echo -e "Gerando arquivos de produção..."
+echo -e "\e[21;39;49m"
+gulp dist --production
+
+echo -e "\e[1;40;92m"
+echo -e "Status do git no branch dev..."
+echo -e "\e[21;39;49m"
+git status
+
+echo -e "\e[1;40;92m"
+echo -e "Adicionado arquivos para commit no branch dev..."
+echo -e "\e[21;39;49m"
+git add .
+
+echo -e "\e[1;40;92m"
+echo -e "Status do git no branch dev..."
+echo -e "\e[21;39;49m"
+git status
+
+echo -e "\e[1;40;92m"
+echo -e "Comitado modificações no branch dev com a mensagem '$1'..."
+echo -e "\e[21;39;49m"
+git commit -m $1
+
+echo -e "\e[1;40;92m"
+echo -e "Submetendo modificações no branch dev..."
+echo -e "\e[21;39;49m"
+git push origin dev
+
+echo -e "\e[1;40;92m"
+echo -e "Alterando para o branch master..."
+echo -e "\e[21;39;49m"
+git checkout master
+
+echo -e "\e[1;40;92m"
+echo -e "Status do git no branch master..."
+echo -e "\e[21;39;49m"
+git status
+
+echo -e "\e[1;40;92m"
+echo -e "Copiando arquivos modificados para raiz..."
+echo -e "\e[21;39;49m"
+cp -fRv public/* .
+
+echo -e "\e[1;40;92m"
+echo -e "Adicionado arquivos para commit no branch master..."
+echo -e "\e[21;39;49m"
+git add .
+git reset -- node_modules public
+
+echo -e "\e[1;40;92m"
+echo -e "Status do git no branch master..."
+echo -e "\e[21;39;49m"
+git status
+
+echo -e "\e[1;40;92m"
+echo -e "Comitado modificações no branch master com a mensagem '$1'..."
+echo -e "\e[21;39;49m"
+git commit -m $1
+
+echo -e "\e[1;40;92m"
+echo -e "Submetendo modificações no branch master..."
+echo -e "\e[21;39;49m"
+git push origin master
+
+echo -e "\e[1;40;92m"
+echo -e "Alterando para o branch dev..."
+echo -e "\e[21;39;49m"
+git checkout dev
+
+echo -e "\e[1;40;92m"
+echo -e "OK"
+echo -e "\e[21;39;49m"
+exit

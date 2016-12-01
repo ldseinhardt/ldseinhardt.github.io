@@ -9,12 +9,17 @@ const $ = loader();
 
 const production = process.argv.indexOf('--production') !== -1;
 
-gulp.task('default', ['clean', 'sync'], () => gulp.start(
+gulp.task('default', ['sync'], () => gulp.start(
+  'dist',
+  'watch'
+));
+
+gulp.task('dist', ['clean'], () => gulp.start(
   'pages',
   'images',
   'scripts',
   'styles',
-  'watch'
+  'fonts'
 ));
 
 gulp.task('watch', () => {
@@ -72,6 +77,10 @@ gulp.task('scripts', () =>
   gulp.src('src/assets/scripts/*.js')
     .pipe($.sourcemaps.init())
       .pipe($.babel())
+      .pipe($.addSrc.prepend([
+        'node_modules/jquery/dist/jquery.js',
+        'libs/jquery-mobile/jquery.mobile.custom.js'
+      ]))
       .pipe($.if(production, $.uglify()))
       .pipe($.concat('all.js'))
     .pipe($.sourcemaps.write())
@@ -81,8 +90,25 @@ gulp.task('scripts', () =>
 gulp.task('styles', () =>
   gulp.src('src/assets/styles/*.less')
     .pipe($.less())
-    .pipe($.autoprefixer())
+    .pipe($.autoprefixer({
+      browsers: [
+        'last 2 versions',
+        '> 5%'
+      ],
+      cascade: true
+    }))
+    .pipe($.addSrc.prepend([
+      'node_modules/normalize.css/normalize.css',
+      'node_modules/font-awesome/css/font-awesome.css'
+    ]))
     .pipe($.if(production, $.cssnano()))
     .pipe($.concat('all.css'))
     .pipe(gulp.dest('public/assets/styles/'))
+);
+
+gulp.task('fonts', () =>
+  gulp.src([
+    'node_modules/font-awesome/fonts/*.{woff2,woff,ttf,svg,eot,otf}'
+  ])
+    .pipe(gulp.dest('public/assets/fonts/'))
 );
