@@ -28,9 +28,9 @@ echo -e "\e[21;39;49m"
 git status
 
 echo -e "\e[1;40;92m"
-echo -e "Comitado modificações no branch dev com a mensagem \"{$1}\"..."
+echo -e "Comitado modificações no branch dev com a mensagem \"$1\"..."
 echo -e "\e[21;39;49m"
-git commit -m "{$1}"
+git commit -m "$1"
 
 echo -e "\e[1;40;92m"
 echo -e "Submetendo modificações no branch dev..."
@@ -64,9 +64,9 @@ echo -e "\e[21;39;49m"
 git status
 
 echo -e "\e[1;40;92m"
-echo -e "Comitado modificações no branch master com a mensagem  \"{$1}\"..."
+echo -e "Comitado modificações no branch master com a mensagem  \"$1\"..."
 echo -e "\e[21;39;49m"
-git commit -m "{$1}"
+git commit -m "$1"
 
 echo -e "\e[1;40;92m"
 echo -e "Submetendo modificações no branch master..."
